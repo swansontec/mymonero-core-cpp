@@ -533,7 +533,8 @@ string serial_bridge::send_step2__try_create_transaction(const string &args_stri
 		   return lightwallet_hardcoded__use_fork_rules(version, early_blocks);
 		},
 		stoull(json_root.get<string>("unlock_time")),
-		nettype_from_string(json_root.get<string>("nettype_string"))
+		nettype_from_string(json_root.get<string>("nettype_string")),
+		stoull(json_root.get<string>("block_height"))
 	);
 	boost::property_tree::ptree root;
 	if (retVals.errCode != noError) {

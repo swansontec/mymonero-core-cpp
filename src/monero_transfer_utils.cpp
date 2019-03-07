@@ -409,7 +409,8 @@ void monero_transfer_utils::send_step2__try_create_transaction(
 	vector<RandomAmountOutputs> &mix_outs, // cannot be const due to convenience__create_transaction's mutability requirement
 	use_fork_rules_fn_type use_fork_rules_fn,
 	uint64_t unlock_time, // or 0
-	cryptonote::network_type nettype
+	cryptonote::network_type nettype,
+	uint64_t block_height
 ) {
 	retVals = {};
 	//
@@ -423,7 +424,8 @@ void monero_transfer_utils::send_step2__try_create_transaction(
 		using_outs, mix_outs,
 		use_fork_rules_fn,
 		unlock_time,
-		nettype // TODO: move to after from_address_string
+		nettype, // TODO: move to after from_address_string
+		block_height
 	);
 	if (create_tx__retVals.errCode != noError) {
 		retVals.errCode = create_tx__retVals.errCode;
@@ -469,7 +471,8 @@ void monero_transfer_utils::create_transaction(
 	use_fork_rules_fn_type use_fork_rules_fn,
 	uint64_t unlock_time, // or 0
 	bool rct,
-	cryptonote::network_type nettype
+	cryptonote::network_type nettype,
+	uint64_t block_height
 ) {
 	retVals.errCode = noError;
 	//
@@ -478,7 +481,7 @@ void monero_transfer_utils::create_transaction(
 	uint32_t fake_outputs_count = fixed_mixinsize();
 	bool bulletproof = true;
 	rct::RangeProofType range_proof_type = bulletproof ? rct::RangeProofPaddedBulletproof : rct::RangeProofBorromean;
-	int bp_version = bulletproof ? (use_fork_rules_fn(HF_VERSION_SMALLER_BP, -10) ? 2 : 1) : 0;
+	int bp_version = bulletproof ? ((block_height > 1788000 - 10) ? 2 : 1) : 0;
 	const rct::RCTConfig rct_config {
 		range_proof_type,
 		bp_version,
@@ -722,7 +725,8 @@ void monero_transfer_utils::convenience__create_transaction(
 	vector<RandomAmountOutputs> &mix_outs,
 	use_fork_rules_fn_type use_fork_rules_fn,
 	uint64_t unlock_time,
-	network_type nettype
+	network_type nettype,
+	uint64_t block_height
 ) {
 	retVals.errCode = noError;
 	//
@@ -794,7 +798,8 @@ void monero_transfer_utils::convenience__create_transaction(
 		outputs, mix_outs,
 		extra, // TODO: move to after address
 		use_fork_rules_fn,
-		unlock_time, true/*rct*/, nettype
+		unlock_time, true/*rct*/, nettype,
+		block_height
 	);
 	if (actualCall_retVals.errCode != noError) {
 		retVals.errCode = actualCall_retVals.errCode; // pass-through

@@ -234,7 +234,8 @@ namespace monero_transfer_utils
 		vector<RandomAmountOutputs> &mix_outs, // it gets sorted
 		use_fork_rules_fn_type use_fork_rules_fn,
 		uint64_t unlock_time, // or 0
-		cryptonote::network_type nettype
+		cryptonote::network_type nettype,
+		uint64_t block_height = 1
 	);
 	//
 	//
@@ -265,7 +266,8 @@ namespace monero_transfer_utils
 		vector<RandomAmountOutputs> &mix_outs, // get sorted
 		use_fork_rules_fn_type use_fork_rules_fn,
 		uint64_t unlock_time							= 0, // or 0
-		network_type nettype 							= MAINNET
+		network_type nettype							= MAINNET,
+		uint64_t block_height = 1
 	);
 	struct TransactionConstruction_RetVals
 	{
@@ -290,7 +292,8 @@ namespace monero_transfer_utils
 		use_fork_rules_fn_type use_fork_rules_fn,
 		uint64_t unlock_time							= 0, // or 0
 		bool rct 										= true,
-		network_type nettype							= MAINNET
+		network_type nettype							= MAINNET,
+		uint64_t block_height = 1
 	);
 }
 
